@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -114,17 +114,52 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
+        """ Create an object of any class
+        Command syntax: create <Class name> <param 1> <param 2> <param 3>...
+        Param syntax: <key name>=<value>
+        """
+        values = args.split()
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif values[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+
+        new_instance = HBNBCommand.classes[values[0]]()
+        if len(values) == 1:
+            storage.save()
+            print(new_instance.id)
+        else:
+            values_ = values[1:]  # Take everything after class name
+            all_attrs = HBNBCommand.classes[values[0]].__dict__
+            class_attrs = {k: v for k, v in all_attrs.items() if not v}
+
+            # Make a dictionary with @values
+            attrs = {
+                        el[0]: el[1] for el in [
+                                val.split("=") for val in values
+                                ]
+                        if el[0] in class_attrs
+                    }
+            for k, v in attrs.items():
+                if v[0] == "\"":
+                    if "_" in v:
+                        v = v.replace("_", " ")
+                        if "\"" in v[1:-1]:
+                            v = v[1:-1]
+                            v = v.replace("\"", r"\"")
+                        attrs[k] = v
+                if "." in v:
+                    attrs[k] = float(v)
+                elif k == "city_id" or k == "user_id":
+                    attrs[k] = v
+                elif ord(v[0]) >= 49 and ord(v[0]) <= 57:
+                    attrs[k] = int(v)
+
+                setattr(new_instance, k, attrs[k])
+            storage.save()
+            print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
@@ -272,7 +307,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +315,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -319,6 +354,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
