@@ -150,7 +150,7 @@ class HBNBCommand(cmd.Cmd):
                             v = v[1:-1]
                             v = v.replace("\"", r"\"")
                         attrs[k] = v
-                if "." in v:
+                if "." in v and "@" not in v:
                     attrs[k] = float(v)
                 elif k == "city_id" or k == "user_id":
                     attrs[k] = v
