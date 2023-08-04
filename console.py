@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import os
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -133,7 +134,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             values_ = values[1:]  # Take everything after class name
             all_attrs = HBNBCommand.classes[values[0]].__dict__
-            class_attrs = {k: v for k, v in all_attrs.items() if not v}
+            class_attrs = {k: v for k, v in all_attrs.items()}
 
             # Make a dictionary with @values
             attrs = {
@@ -158,6 +159,7 @@ class HBNBCommand(cmd.Cmd):
                     attrs[k] = int(v)
 
                 setattr(new_instance, k, attrs[k])
+            storage.new(new_instance)
             storage.save()
             print(new_instance.id)
 
@@ -236,16 +238,21 @@ class HBNBCommand(cmd.Cmd):
         """ Shows all objects, or all objects of a class"""
         print_list = []
 
+        if os.getenv('HBNB_TYPE_STORAGE') == 'file':
+            store = storage._FileStorage__objects
+        elif os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            store = storage.all(eval(args))
+
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in store.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 print_list.append(str(v))
 
         print(print_list)
