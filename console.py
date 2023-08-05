@@ -245,10 +245,10 @@ class HBNBCommand(cmd.Cmd):
         """ Shows all objects, or all objects of a class"""
         print_list = []
 
-        if os.getenv('HBNB_TYPE_STORAGE') == 'file':
-            store = storage._FileStorage__objects
-        elif os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             store = storage.all(eval(args))
+        else:
+            store = storage._FileStorage__objects
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
