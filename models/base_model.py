@@ -11,13 +11,11 @@ Base = declarative_base()
 
 class BaseModel:
     """A base class for all hbnb models"""
-
-    
-    if os.getenv("HBNB_TYPE_STORAGE") == "db":
-        id = Column(String(60), default=str(uuid.uuid4()), primary_key=True, nullable=False)
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        id = Column(String(60), default=str(uuid.uuid4()),
+                    primary_key=True, nullable=False)
         created_at = Column(DateTime, default=datetime.now(), nullable=False)
         updated_at = Column(DateTime, default=datetime.now(), nullable=False)
-
     else:
         def __init__(self, *args, **kwargs):
             """Instatntiates a new model"""
@@ -27,10 +25,12 @@ class BaseModel:
                 self.created_at = datetime.now()
                 self.updated_at = datetime.now()
             else:
-                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f')
-                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f')
+                update_time = datetime.strptime(kwargs['updated_at'],
+                                                '%Y-%m-%dT%H:%M:%S.%f')
+                created_time = datetime.strptime(kwargs['created_at'],
+                                                 '%Y-%m-%dT%H:%M:%S.%f')
+                kwargs['updated_at'] = update_time
+                kwargs['created_at'] = created_time
                 del kwargs['__class__']
                 self.__dict__.update(kwargs)
 
@@ -56,7 +56,6 @@ class BaseModel:
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        dictionary.pop('_sa_instance_state', None)
         return dictionary
 
     def delete(self):

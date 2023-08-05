@@ -151,9 +151,10 @@ class HBNBCommand(cmd.Cmd):
                             v = v[1:-1]
                             v = v.replace("\"", r"\"")
                         attrs[k] = v
+                v = v.strip('"')
                 if "." in v and "@" not in v:
                     attrs[k] = float(v)
-                elif k == "city_id" or k == "user_id":
+                elif k == "city_id" or k == "user_id" or k == "state_id":
                     attrs[k] = v
                 elif ord(v[0]) >= 49 and ord(v[0]) <= 57:
                     attrs[k] = int(v)
@@ -224,7 +225,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
