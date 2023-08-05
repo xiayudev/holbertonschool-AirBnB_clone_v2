@@ -152,14 +152,20 @@ class HBNBCommand(cmd.Cmd):
                             v = v.replace("\"", r"\"")
                         attrs[k] = v
                 v = v.strip('"')
+                flag = 0
                 if "." in v and "@" not in v:
                     attrs[k] = float(v)
+                    flag = 1
                 elif k == "city_id" or k == "user_id" or k == "state_id":
                     attrs[k] = v
+                    flag = 1
                 elif ord(v[0]) >= 49 and ord(v[0]) <= 57:
                     attrs[k] = int(v)
-
-                setattr(new_instance, k, attrs[k])
+                    flag = 1
+                if flag:
+                    setattr(new_instance, k, attrs[k])
+                else:
+                    setattr(new_instance, k, v)
             storage.new(new_instance)
             storage.save()
             print(new_instance.id)
