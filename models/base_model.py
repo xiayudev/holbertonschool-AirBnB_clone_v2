@@ -12,7 +12,7 @@ Base = declarative_base()
 class BaseModel:
     """A base class for all hbnb models"""
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        id = Column(String(60), default=str(uuid.uuid4()),
+        id = Column(String(60), default=lambda: str(uuid.uuid4()),
                     primary_key=True, nullable=False)
         created_at = Column(DateTime, default=datetime.now(), nullable=False)
         updated_at = Column(DateTime, default=datetime.now(), nullable=False)

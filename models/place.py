@@ -1,15 +1,19 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Float, Integer
+from sqlalchemy import Column, String, ForeignKey, Float, Integer, Table
 from sqlalchemy.orm import relationship
 import os
 
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
     place_amenity = Table('place_amenity', Base.metadata,
-        Column('place_id', String(60), primary_key=True, ForeignKey('places.id'), nullable=False),
-        Column('amenity_id', primary_key=True, ForeignKey('amenities.id'), nullable=False)
-    )
+                          Column('place_id', String(60),
+                                 ForeignKey('places.id'),
+                                 primary_key=True, nullable=False),
+                          Column('amenity_id',
+                                 ForeignKey('amenities.id'),
+                                 primary_key=True, nullable=False))
+
     class Place(BaseModel, Base):
         """ State class """
 
@@ -29,7 +33,9 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                                 backref="place",
                                 cascade="all, delete-orphan"
                                 )
-        amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 back_populates="place_amenities",
+                                 viewonly=False)
 
 else:
     class Place(BaseModel):
@@ -60,7 +66,8 @@ else:
         def amenities(self):
             from models.review import Amenity
             amens = storage.all(Amenity)
-            list_amens = [amen for amen in amens.values() if amen.id in amenity_ids]
+            list_amens = [amen for amen in amens.values()
+                          if amen.id in amenity_ids]
             return list_amens
 
         @amenities.setter
@@ -69,5 +76,3 @@ else:
                 amenity_ids.append(obj.id)
             else:
                 pass
-
-
