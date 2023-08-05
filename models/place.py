@@ -17,8 +17,8 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
         number_bathrooms = Column(Integer, default=0, nullable=False)
         max_guest = Column(Integer, default=0, nullable=False)
         price_by_night = Column(Integer, default=0, nullable=False)
-        latitude = Column(Float, default=0, nullable=True)
-        longitude = Column(Float, default=0, nullable=True)
+        latitude = Column(Float, nullable=True)
+        longitude = Column(Float, nullable=True)
 
 else:
     class Place(BaseModel):
