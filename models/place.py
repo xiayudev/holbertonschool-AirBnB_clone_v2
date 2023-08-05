@@ -6,6 +6,10 @@ from sqlalchemy.orm import relationship
 import os
 
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    place_amenity = Table('place_amenity', Base.metadata,
+        Column('place_id', String(60), primary_key=True, ForeignKey('places.id'), nullable=False),
+        Column('amenity_id', primary_key=True, ForeignKey('amenities.id'), nullable=False)
+    )
     class Place(BaseModel, Base):
         """ State class """
 
@@ -25,6 +29,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                                 backref="place",
                                 cascade="all, delete-orphan"
                                 )
+        amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
 
 else:
     class Place(BaseModel):
@@ -50,3 +55,19 @@ else:
             id_places = [v.id for v in place.values()]
             rev = [v for v in rev.values() if v.place_id in id_places]
             return rev
+
+        @property
+        def amenities(self):
+            from models.review import Amenity
+            amens = storage.all(Amenity)
+            list_amens = [amen for amen in amens.values() if amen.id in amenity_ids]
+            return list_amens
+
+        @amenities.setter
+        def amenities(self, obj):
+            if obj.__class__.__name__ == "Amenity":
+                amenity_ids.append(obj.id)
+            else:
+                pass
+
+
