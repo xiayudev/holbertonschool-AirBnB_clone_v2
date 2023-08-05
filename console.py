@@ -153,11 +153,11 @@ class HBNBCommand(cmd.Cmd):
                         attrs[k] = v
                 v = v.strip('"')
                 flag = 0
+                keys = ["city_id", "user_id", "place_id", "state_id"]
                 if "." in v and "@" not in v:
                     attrs[k] = float(v)
                     flag = 1
-                elif k == "city_id" or k == "user_id" or k == "state_id"
-                        or k == "place_id":
+                elif k in keys:
                     attrs[k] = v
                     flag = 1
                 elif ord(v[0]) >= 49 and ord(v[0]) <= 57:
@@ -369,6 +369,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
