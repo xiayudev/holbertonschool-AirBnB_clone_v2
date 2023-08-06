@@ -129,9 +129,12 @@ class HBNBCommand(cmd.Cmd):
 
         new_instance = HBNBCommand.classes[values[0]]()
         if len(values) == 1:
-            storage.new(new_instance)
-            storage.save()
-            print(new_instance.id)
+            if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+                storage.new(new_instance)
+                storage.save()
+                print(new_instance.id)
+            else:
+                print("You need at least one argument")
         else:
             values_ = values[1:]  # Take everything after class name
             all_attrs = HBNBCommand.classes[values[0]].__dict__
