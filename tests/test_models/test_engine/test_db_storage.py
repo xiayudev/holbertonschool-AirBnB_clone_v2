@@ -2,6 +2,7 @@
 """Module to test database storage"""
 
 
+from models import storage
 import MySQLdb
 import unittest
 import inspect
@@ -11,6 +12,7 @@ import cmd
 import shutil
 import os
 import console
+import json
 
 """
     Backup console
@@ -71,6 +73,8 @@ DB_CONFIG = {
 }
 
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    from models.state import State
+
     class TestDBStorage(unittest.TestCase):
         """Test cases for database storage"""
 
@@ -83,6 +87,18 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
             """Close the cursor and connection after the test"""
             self.cursor.close()
             self.db.close()
- 
+
+        def test_all_method(self):
+            """Test for all method"""
+            storage.save()
+            exec_command(my_console, 'create State name="Cali"')
+            self.db.commit()
+            total = len(storage.all(State))
+            total_con = len(json.loads(exec_command(my_console, "all State")))
+            self.assertAlmostEqual(total, total_con)
+            exec_command(my_console, 'create State name="Cali"')
+            self.db.commit()
+            total_con = len(json.loads(exec_command(my_console, "all State")))
+            self.assertAlmostEqual(total_con, total + 1)
 else:
     pass
