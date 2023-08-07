@@ -88,11 +88,11 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
             """Test for all method"""
             total = len(storage.all(State))
             total_con = len(json.loads(exec_command(my_console, "all State")))
-            self.assertAlmostEqual(total, total_console)
+            self.assertAlmostEqual(total, total_con)
             exec_command(my_console, 'create State name="Cali"')
             self.db.commit()
             total_con = len(json.loads(exec_command(my_console, "all State")))
-            self.assertAlmostEqual(total_console, total + 1)
+            self.assertAlmostEqual(total_con, total + 1)
 else:
     import MySQLdb
     import inspect
