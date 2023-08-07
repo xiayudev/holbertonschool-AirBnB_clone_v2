@@ -129,13 +129,13 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
             """Test for checking types"""
             self.cursor.execute("SELECT first_name FROM users")
             emails = self.cursor.fetchall()
-            self.assertNotEqual(type(emails[0][0]), str)
+            self.assertEqual(type(emails[0][0]), str)
 
         def test_type_last_name(self):
             """Test for checking types"""
             self.cursor.execute("SELECT last_name FROM users")
             emails = self.cursor.fetchall()
-            self.assertNotEqual(type(emails[0][0]), str)
+            self.assertEqual(type(emails[0][0]), str)
 
         def test_type_password(self):
             """Test for checking types"""
