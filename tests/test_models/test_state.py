@@ -13,15 +13,14 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
     import cmd
     import shutil
     import console
-   
+
     """
         Backup console
     """
     if os.path.exists("copy_console.py"):
         shutil.copy("copy_console.py", "console.py")
     shutil.copy("console.py", "copy_console.py")
-    
-    
+
     """
         Updating console to remove "__main__"
     """
@@ -37,7 +36,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                         file_o.write(line.lstrip("    "))
                 else:
                     file_o.write(line)
-    
+
     """
      Create console
     """
@@ -45,16 +44,14 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
     for name, obj in inspect.getmembers(console):
         if inspect.isclass(obj) and issubclass(obj, cmd.Cmd):
             console_obj = obj
-    
+
     my_console = console_obj(stdout=io.StringIO(), stdin=io.StringIO())
     my_console.use_rawinput = False
-    
-    
+
     """
      Exec command
     """
-    
-    
+
     def exec_command(my_console, the_command, last_lines=1):
         my_console.stdout = io.StringIO()
         real_stdout = sys.stdout
@@ -63,15 +60,14 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
         sys.stdout = real_stdout
         lines = my_console.stdout.getvalue().split("\n")
         return "\n".join(lines[(-1*(last_lines+1)):-1])
-    
-    
+
     DB_CONFIG = {
         'host': 'localhost',
         'user': 'hbnb_test',
         'password': 'hbnb_test_pwd',
         'db': 'hbnb_test_db',
     }
-    
+
     class TestDBStorage(unittest.TestCase):
         """Test cases for database storage"""
 

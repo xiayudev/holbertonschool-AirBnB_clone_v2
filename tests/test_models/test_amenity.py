@@ -15,15 +15,14 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
     import cmd
     import shutil
     import console
-   
+
     """
         Backup console
     """
     if os.path.exists("copy_console.py"):
         shutil.copy("copy_console.py", "console.py")
     shutil.copy("console.py", "copy_console.py")
-    
-    
+
     """
         Updating console to remove "__main__"
     """
@@ -39,7 +38,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                         file_o.write(line.lstrip("    "))
                 else:
                     file_o.write(line)
-    
+
     """
      Create console
     """
@@ -47,16 +46,14 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
     for name, obj in inspect.getmembers(console):
         if inspect.isclass(obj) and issubclass(obj, cmd.Cmd):
             console_obj = obj
-    
+
     my_console = console_obj(stdout=io.StringIO(), stdin=io.StringIO())
     my_console.use_rawinput = False
-    
-    
+
     """
      Exec command
     """
-    
-    
+
     def exec_command(my_console, the_command, last_lines=1):
         my_console.stdout = io.StringIO()
         real_stdout = sys.stdout
@@ -65,15 +62,14 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
         sys.stdout = real_stdout
         lines = my_console.stdout.getvalue().split("\n")
         return "\n".join(lines[(-1*(last_lines+1)):-1])
-    
-    
+
     DB_CONFIG = {
         'host': 'localhost',
         'user': 'hbnb_test',
         'password': 'hbnb_test_pwd',
         'db': 'hbnb_test_db',
     }
-    
+
     class TestAmenity(unittest.TestCase):
         """Test cases for Amenity class"""
 
@@ -91,7 +87,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
             """Test for class Amenity"""
             # Create State
             state_id = exec_command(my_console,
-                                      'create State name="Alaska"')
+                                    'create State name="Alaska"')
             self.db.commit()
 
             self.cursor.execute("SELECT COUNT(id) AS count_1  FROM states")
@@ -103,17 +99,21 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
 
             # Create City
             city_id = exec_command(my_console,
-                                      f"""create City state_id="{state_id}" name="New_York" """)
+                                   f"""create City
+                                   state_id="{state_id}" name="New_York" """)
             self.db.commit()
 
             # Create User
             user_id = exec_command(my_console,
-                                      f"""create User email="a@.com" password="apasswd" """)
+                                   f"""create User email="a@.com"
+                                   password="apasswd" """)
             self.db.commit()
 
             # Create Places
             place_id = exec_command(my_console,
-                                      f"""create Place user_id="{user_id}" city_id="{city_id}" name="Central_Park" """)
+                                    f"""create Place user_id="{user_id}"
+                                    city_id="{city_id}"
+                                    name="Central_Park" """)
             self.db.commit()
 
             # Create Amenity
