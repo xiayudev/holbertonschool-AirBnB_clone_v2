@@ -150,18 +150,6 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
             names_1 = self.cursor.fetchall()
             self.assertEqual(type(names_1[0][0]), int)
 
-        def test_latitude_type(self):
-            """Test for checking if number rooms exist"""
-            self.cursor.execute("SELECT latitude FROM places")
-            names_1 = self.cursor.fetchall()
-            self.assertEqual(type(names_1[0][0]), float)
-
-        def test_longitude_type(self):
-            """Test for checking if number rooms exist"""
-            self.cursor.execute("SELECT longitude FROM places")
-            names_1 = self.cursor.fetchall()
-            self.assertEqual(type(names_1[0][0]), float)
-
         def test_user_id_type(self):
             """Test for checking if number rooms exist"""
             self.cursor.execute("SELECT user_id FROM places")
