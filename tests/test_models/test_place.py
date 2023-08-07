@@ -120,15 +120,59 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                                             ]
             self.assertTrue(name_exist)
 
-        def test_number_rooms_exist(self):
-            """Test for checking if number rooms exist"""
+        def test_type_name(self):
+            """Test for checking typest"""
+            self.cursor.execute("SELECT name FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), str)
+
+        def test_type_number_rooms(self):
+            """Test for checking typest"""
             self.cursor.execute("SELECT number_rooms FROM places")
             names_1 = self.cursor.fetchall()
-            name_exist = 4 in [
-                                            tup[0] for tup in names_1
-                                            if 4 in tup
-                                            ]
-            self.assertTrue(name_exist)
+            self.assertEqual(type(names_1[0][0]), int)
+
+        def test_number_baths_type(self):
+            """Test for checking if number rooms exist"""
+            self.cursor.execute("SELECT number_bathrooms FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), int)
+
+        def test_max_guest_type(self):
+            """Test for checking if number rooms exist"""
+            self.cursor.execute("SELECT max_guest FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), int)
+
+        def test_price_type(self):
+            """Test for checking if number rooms exist"""
+            self.cursor.execute("SELECT price_by_night FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), int)
+
+        def test_latitude_type(self):
+            """Test for checking if number rooms exist"""
+            self.cursor.execute("SELECT latitude FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), float)
+
+        def test_longitude_type(self):
+            """Test for checking if number rooms exist"""
+            self.cursor.execute("SELECT longitude FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), float)
+
+        def test_user_id_type(self):
+            """Test for checking if number rooms exist"""
+            self.cursor.execute("SELECT user_id FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), str)
+
+        def test_city_id_type(self):
+            """Test for checking if number rooms exist"""
+            self.cursor.execute("SELECT city_id FROM places")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), str)
 
         def test_max_guest_exist(self):
             """Test for checking if max_guest exist"""

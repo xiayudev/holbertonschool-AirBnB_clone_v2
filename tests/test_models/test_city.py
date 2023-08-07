@@ -99,6 +99,24 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
             state_ids = state_id_3 in [tup[0] for tup in rows_1 if tup[0]]
             self.assertTrue(state_ids)
 
+        def test_type_name_state(self):
+            """Comment"""
+            self.cursor.execute("SELECT name FROM cities")
+            rows_1 = self.cursor.fetchall()
+            self.assertEqual(type(rows_1[0][0]), str)
+
+        def test_type_id_state(self):
+            """Comment"""
+            self.cursor.execute("SELECT id FROM cities")
+            rows_1 = self.cursor.fetchall()
+            self.assertEqual(type(rows_1[0][0]), str)
+
+        def test_type_state_id_state(self):
+            """Comment"""
+            self.cursor.execute("SELECT state_id FROM cities")
+            rows_1 = self.cursor.fetchall()
+            self.assertEqual(type(rows_1[0][0]), str)
+
         def test_city_exist(self):
             """Test for checking if state name exist"""
             self.cursor.execute("SELECT name FROM cities")

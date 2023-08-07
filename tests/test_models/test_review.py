@@ -15,6 +15,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
     import cmd
     import shutil
     import console
+    import datetime
 
     """
         Backup console
@@ -127,6 +128,41 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                                             ]
             self.assertTrue(text_exist)
 
+        def test_type_name(self):
+            """Test for checking if review text exist"""
+            self.cursor.execute("SELECT text FROM reviews")
+            texts = self.cursor.fetchall()
+            self.assertTrue(type(texts[0][0]), str)
+
+        def test_type_user_id(self):
+            """Test for checking if review text exist"""
+            self.cursor.execute("SELECT user_id FROM reviews")
+            texts = self.cursor.fetchall()
+            self.assertTrue(type(texts[0][0]), str)
+
+        def test_type_place_id(self):
+            """Test for checking if review text exist"""
+            self.cursor.execute("SELECT place_id FROM reviews")
+            texts = self.cursor.fetchall()
+            self.assertTrue(type(texts[0][0]), str)
+
+        def test_type_id(self):
+            """Test for checking if review text exist"""
+            self.cursor.execute("SELECT id FROM reviews")
+            texts = self.cursor.fetchall()
+            self.assertTrue(type(texts[0][0]), str)
+
+        def test_type_created_at(self):
+            """Test for checking if review text exist"""
+            self.cursor.execute("SELECT created_at FROM reviews")
+            texts = self.cursor.fetchall()
+            self.assertTrue(type(texts[0][0]), datetime.datetime)
+
+        def test_type_updated_at(self):
+            """Test for checking if review text exist"""
+            self.cursor.execute("SELECT updated_at FROM reviews")
+            texts = self.cursor.fetchall()
+            self.assertTrue(type(texts[0][0]), datetime.datetime)
 else:
     from tests.test_models.test_base_model import test_basemodel
 

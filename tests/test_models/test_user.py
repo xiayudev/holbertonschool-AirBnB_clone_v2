@@ -113,6 +113,36 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                                             ]
             self.assertTrue(email_exist)
 
+        def test_type_name(self):
+            """Test for checking types"""
+            self.cursor.execute("SELECT email FROM users")
+            emails = self.cursor.fetchall()
+            self.assertEqual(type(emails[0][0]), str)
+
+        def test_type_password(self):
+            """Test for checking types"""
+            self.cursor.execute("SELECT password FROM users")
+            emails = self.cursor.fetchall()
+            self.assertEqual(type(emails[0][0]), str)
+
+        def test_type_first_name(self):
+            """Test for checking types"""
+            self.cursor.execute("SELECT first_name FROM users")
+            emails = self.cursor.fetchall()
+            self.assertNotEqual(type(emails[0][0]), str)
+
+        def test_type_last_name(self):
+            """Test for checking types"""
+            self.cursor.execute("SELECT last_name FROM users")
+            emails = self.cursor.fetchall()
+            self.assertNotEqual(type(emails[0][0]), str)
+
+        def test_type_password(self):
+            """Test for checking types"""
+            self.cursor.execute("SELECT password FROM users")
+            emails = self.cursor.fetchall()
+            self.assertEqual(type(emails[0][0]), str)
+
         def test_first_name_exist(self):
             """Test for checking if first name exist"""
             self.cursor.execute("SELECT first_name FROM users")

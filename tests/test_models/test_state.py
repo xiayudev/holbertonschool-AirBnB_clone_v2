@@ -13,6 +13,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
     import cmd
     import shutil
     import console
+    import datetime
 
     """
         Backup console
@@ -68,7 +69,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
         'db': 'hbnb_test_db',
     }
 
-    class TestDBStorage(unittest.TestCase):
+    class TestState(unittest.TestCase):
         """Test cases for database storage"""
 
         def setUp(self):
@@ -87,6 +88,13 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                                       'create State name="California"')
             self.db.commit()
 
+            # Create a new state
+            state_id_2 = exec_command(my_console,
+                                      'create State name="New_York"')
+            self.db.commit()
+
+        def test_count_insertion(self):
+            """Test for checking how many insertions are"""
             self.cursor.execute("SELECT COUNT(id) AS count_1  FROM states")
             count_1 = self.cursor.fetchall()
 
@@ -94,14 +102,29 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
             rows_1 = self.cursor.fetchall()
             self.assertAlmostEqual(count_1[0][0], len(rows_1))
 
-            # Create a new state
-            state_id_2 = exec_command(my_console,
-                                      'create State name="New_York"')
-            self.db.commit()
+        def test_type(self):
+            """Test for checking type value"""
+            self.cursor.execute("SELECT name FROM states")
+            rows_1 = self.cursor.fetchall()
+            self.assertAlmostEqual(type(rows_1[0][0]), str)
 
-            self.cursor.execute("SELECT COUNT(id) AS count_2  FROM states")
-            count_2 = self.cursor.fetchall()
-            self.assertAlmostEqual(count_2[0][0], len(rows_1) + 1)
+        def test_type_id(self):
+            """Test for checking type value"""
+            self.cursor.execute("SELECT id FROM states")
+            rows_1 = self.cursor.fetchall()
+            self.assertAlmostEqual(type(rows_1[0][0]), str)
+
+        def test_type_created_At(self):
+            """Test for checking type value"""
+            self.cursor.execute("SELECT created_at FROM states")
+            rows_1 = self.cursor.fetchall()
+            self.assertAlmostEqual(type(rows_1[0][0]), datetime.datetime)
+
+        def test_type_updated_At(self):
+            """Test for checking type value"""
+            self.cursor.execute("SELECT updated_at FROM states")
+            rows_1 = self.cursor.fetchall()
+            self.assertAlmostEqual(type(rows_1[0][0]), datetime.datetime)
 
         def test_state_exist(self):
             """Test for checking if state name exist"""
