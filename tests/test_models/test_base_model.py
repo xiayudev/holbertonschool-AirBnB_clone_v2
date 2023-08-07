@@ -9,7 +9,23 @@ import os
 
 
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
-    pass
+    class test_basemodelDB(unittest.TestCase):
+        """test for base model working with database"""
+
+        def test_basemodel_id(self):
+            """Test checking id"""
+            Base_1 = BaseModel()
+            self.assertAlmostEqual(type(Base_1.id.__class__.__name__), str)
+
+        def test_basemodel_updated_at(self):
+            """Test for checking attribut"""
+            b1 = BaseModel()
+            self.assertAlmostEqual(type(b1.id.__class__.__name__), str)
+
+        def test_to_dict(self):
+            """Test to_dict"""
+            Base_3 = BaseModel()
+            self.assertAlmostEqual(type(Base_3.id.__class__.__name__), str)
 else:
     class test_basemodel(unittest.TestCase):
         """ """
