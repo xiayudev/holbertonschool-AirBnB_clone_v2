@@ -70,52 +70,87 @@ DB_CONFIG = {
     'db': 'hbnb_test_db',
 }
 
+if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    class TestDBStorage(unittest.TestCase):
+        """Test cases for database storage"""
 
-class TestDataBaseQueries(unittest.TestCase):
-    """Test cases for database storage"""
+        def setUp(self):
+            """Connect to the test database and create a cursor"""
+            self.db = MySQLdb.connect(**DB_CONFIG)
+            self.cursor = self.db.cursor()
 
-    def setUp(self):
-        """Connect to the test database and create a cursor"""
-        self.db = MySQLdb.connect(**DB_CONFIG)
-        self.cursor = self.db.cursor()
+        def tearDown(self):
+            """Close the cursor and connection after the test"""
+            self.cursor.close()
+            self.db.close()
 
-    def tearDown(self):
-        """Close the cursor and connection after the test"""
-        self.cursor.close()
-        self.db.close()
+        def test_create_state(self):
+            """Test for class State"""
+            state_id_1 = exec_command(my_console,
+                                      'create State name="California"')
+            self.db.commit()
 
-    def test_create_state(self):
-        """Test for class State"""
-        state_id_1 = exec_command(my_console, 'create State name="California"')
-        self.db.commit()
+            self.cursor.execute("SELECT COUNT(id) AS count_1  FROM states")
+            count_1 = self.cursor.fetchall()
 
-        self.cursor.execute("SELECT COUNT(id) AS count_1  FROM states")
-        count_1 = self.cursor.fetchall()
+            self.cursor.execute("SELECT id FROM states")
+            rows_1 = self.cursor.fetchall()
+            self.assertAlmostEqual(count_1[0][0], len(rows_1))
 
-        self.cursor.execute("SELECT id FROM states")
-        rows_1 = self.cursor.fetchall()
-        self.assertAlmostEqual(count_1[0][0], len(rows_1))
+            # Create a new state
+            state_id_2 = exec_command(my_console,
+                                      'create State name="New_York"')
+            self.db.commit()
 
-        self.cursor.execute("SELECT name FROM states")
-        names_1 = self.cursor.fetchall()
-        name_exist = "California" in [
-                                        tup[0] for tup in names_1
-                                        if "California" in tup
-                                        ]
-        self.assertTrue(name_exist)
+            self.cursor.execute("SELECT COUNT(id) AS count_2  FROM states")
+            count_2 = self.cursor.fetchall()
+            self.assertAlmostEqual(count_2[0][0], len(rows_1) + 1)
 
-        # Create a new state
-        state_id_2 = exec_command(my_console, 'create State name="New_York"')
-        self.db.commit()
+        def test_state_exist(self):
+            """Test for checking if state name exist"""
+            self.cursor.execute("SELECT name FROM states")
+            names_1 = self.cursor.fetchall()
+            name_exist = "California" in [
+                                            tup[0] for tup in names_1
+                                            if "California" in tup
+                                            ]
+            self.assertTrue(name_exist)
 
-        self.cursor.execute("SELECT COUNT(id) AS count_2  FROM states")
-        count_2 = self.cursor.fetchall()
-        self.assertAlmostEqual(count_2[0][0], len(rows_1) + 1)
+            self.cursor.execute("SELECT name  FROM states")
+            names_2 = self.cursor.fetchall()
+            name_exist = "New York" in [
+                                            tup[0] for tup in names_2
+                                            if "New York" in tup
+                                            ]
+            self.assertTrue(name_exist)
 
-        self.cursor.execute("SELECT name  FROM states")
-        names_2 = self.cursor.fetchall()
-        name_exist = "New York" in [
-                                        tup[0] for tup in names_2
-                                        if "New York" in tup
-                                        ]
-        self.assertTrue(name_exist)
+        def test_create_city(self):
+            """Test for creating city"""
+            state_id_3 = exec_command(my_console,
+                                      'create State name="Colorado"')
+            self.db.commit()
+            city_id_1 = exec_command(my_console,
+                                     f"""create City
+                                     name=\"Denver\"
+                                     state_id=\"{state_id_3}\"""")
+            self.db.commit()
+            self.cursor.execute("SELECT COUNT(id) AS count_1 FROM cities")
+            count_1 = self.cursor.fetchall()
+
+            self.cursor.execute("SELECT state_id FROM cities")
+            rows_1 = self.cursor.fetchall()
+            state_ids = state_id_3 in [tup[0] for tup in rows_1 if tup[0]]
+            self.assertTrue(state_ids)
+
+        def test_city_exist(self):
+            """Test for checking if state name exist"""
+            self.cursor.execute("SELECT name FROM cities")
+            names = self.cursor.fetchall()
+            name_exist = "Denver" in [
+                                            tup[0] for tup in names
+                                            if "Denver" in tup
+                                            ]
+            self.assertTrue(name_exist)
+
+else:
+    pass

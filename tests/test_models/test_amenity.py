@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ """
-from tests.test_models.test_base_model import test_basemodel
 from models.amenity import Amenity
 import os
 
@@ -8,6 +7,8 @@ import os
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
     pass
 else:
+    from tests.test_models.test_base_model import test_basemodel
+
     class test_Amenity(test_basemodel):
         """ """
 

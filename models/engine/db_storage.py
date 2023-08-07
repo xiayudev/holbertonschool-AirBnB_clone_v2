@@ -7,12 +7,19 @@ from models.state import State
 
 
 class DBStorage:
-    """This class manages storage of hbnb models in the database with sqlalchemy"""
+    """This class manages storage of hbnb models in the
+    database with sqlalchemy
+    """
     __engine = None
     __session = None
 
     def __init__(self):
-        self.__engine = create_engine(f"mysql+mysqldb://{os.getenv('HBNB_MYSQL_USER')}:{os.getenv('HBNB_MYSQL_PWD')}@{os.getenv('HBNB_MYSQL_HOST')}/{os.getenv('HBNB_MYSQL_DB')}", pool_pre_ping=True)
+        user = os.getenv('HBNB_MYSQL_USER')
+        pwd = os.getenv('HBNB_MYSQL_PWD')
+        h = os.getenv('HBNB_MYSQL_HOST')
+        db = os.getenv('HBNB_MYSQL_DB')
+        self.__engine = create_engine(f"mysql+mysqldb://{user}:{pwd}@{h}/{db}",
+                                      pool_pre_ping=True)
 
     def all(self, cls=None):
         dic = {}
@@ -30,7 +37,11 @@ class DBStorage:
 
     def delete(self, obj=None):
         if obj is not None:
-            self.__session.query(obj.__class__).filter_by(id=obj.id).delete(synchronize_session=False)
+            self.__session.query(obj.__class__
+                                 ).filter_by(id=obj.id
+                                             ).delete(
+                                                      synchronize_session=False
+                                                      )
 
     def reload(self):
         """Loads storage dictionary from a database"""
