@@ -9,6 +9,7 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
     from models.place import Place
     from models import storage
     import unittest
+    import datetime
     import inspect
     import io
     import sys
@@ -130,6 +131,30 @@ if os.getenv("HBNB_TYPE_STORAGE") == "db":
                                             if "Cable" in tup
                                             ]
             self.assertTrue(name_exist)
+
+        def test_type(self):
+            """Test for checking if state name exist"""
+            self.cursor.execute("SELECT name FROM amenities")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), str)
+
+        def test_type_created(self):
+            """Test for checking if state name exist"""
+            self.cursor.execute("SELECT created_at FROM amenities")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), datetime.datetime)
+
+        def test_type_updated(self):
+            """Test for checking if state name exist"""
+            self.cursor.execute("SELECT updated_at FROM amenities")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), datetime.datetime)
+
+        def test_typei_id(self):
+            """Test for checking if state name exist"""
+            self.cursor.execute("SELECT id FROM amenities")
+            names_1 = self.cursor.fetchall()
+            self.assertEqual(type(names_1[0][0]), str)
 
 else:
     from tests.test_models.test_base_model import test_basemodel
