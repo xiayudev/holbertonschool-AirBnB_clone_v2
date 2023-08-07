@@ -2,27 +2,27 @@
 """ """
 from tests.test_models.test_base_model import test_basemodel
 from models.city import City
+import os
 
 
-@unittest.skip("showing class skipping")
-class test_City(test_basemodel):
-    """ """
-
-    @unittest.skip("demonstrating skipping")
-    def __init__(self, *args, **kwargs):
+if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    pass
+else:
+    class test_City(test_basemodel):
         """ """
-        super().__init__(*args, **kwargs)
-        self.name = "City"
-        self.value = City
 
-    @unittest.skip("demonstrating skipping")
-    def test_state_id(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.state_id), str)
+        def __init__(self, *args, **kwargs):
+            """ """
+            super().__init__(*args, **kwargs)
+            self.name = "City"
+            self.value = City
 
-    @unittest.skip("demonstrating skipping")
-    def test_name(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.name), str)
+        def test_state_id(self):
+            """ """
+            new = self.value()
+            self.assertEqual(type(new.state_id), str)
+
+        def test_name(self):
+            """ """
+            new = self.value()
+            self.assertEqual(type(new.name), str)
