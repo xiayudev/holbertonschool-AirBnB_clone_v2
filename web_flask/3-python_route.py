@@ -22,7 +22,7 @@ def task2(text):
 
 
 @app.route("/python/<text>", strict_slashes=False)
-def task3(text="is cool"):
+def task3(text="is_cool"):
     return f"Python {text.replace('_', ' ')}"
 
 
