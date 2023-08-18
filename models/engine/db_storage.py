@@ -18,7 +18,7 @@ class DBStorage:
         pwd = os.getenv('HBNB_MYSQL_PWD')
         h = os.getenv('HBNB_MYSQL_HOST')
         db = os.getenv('HBNB_MYSQL_DB')
-        self.__engine = create_engine(f"mysql+mysqldb://{user}:{pwd}@{h}/{db}",
+        self.__engine = create_engine(f"mariadb+mariadbconnector://{user}:{pwd}@{h}/{db}",
                                       pool_pre_ping=True)
 
     def all(self, cls=None):
