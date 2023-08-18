@@ -40,8 +40,8 @@ class DBStorage:
             self.__session.query(obj.__class__
                                  ).filter_by(id=obj.id
                                              ).delete(
-                                                      synchronize_session=False
-                                                      )
+                synchronize_session=False
+            )
 
     def reload(self):
         """Loads storage dictionary from a database"""

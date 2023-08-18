@@ -28,7 +28,7 @@ def cities_by_states():
         "users": {v.id: v.first_name for v in storage.all(User).values()},
         "places": storage.all(Place)
     }
-    return render_template("100-hbnb.html", data=data) 
+    return render_template("100-hbnb.html", data=data)
 
 
 @app.teardown_appcontext
