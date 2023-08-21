@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """Module to start a Flask web application"""
 
-from ast import literal_eval
-from flask import Flask, abort
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -35,9 +34,7 @@ def python(text=None):
 @app.route("/number/<int:n>", strict_slashes=False)
 def number(n):
     """Number page"""
-    if type(n) is int:
-        return "{} is a number".format(n)
-    abort(404)
+    return "{} is a number".format(n)
 
 
 if __name__ == "__main__":

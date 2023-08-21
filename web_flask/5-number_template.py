@@ -34,17 +34,13 @@ def python(text=None):
 @app.route("/number/<int:n>", strict_slashes=False)
 def number(n):
     """Number page"""
-    if type(n) is int:
-        return "{} is a number".format(n)
-    abort(404)
+    return "{} is a number".format(n)
 
 
 @app.route("/number_template/<int:n>", strict_slashes=False)
 def number_template(n):
     """Number Template page"""
-    if type(n) is int:
-        return render_template("5-number.html", n=n)
-    abort(404)
+    return render_template("5-number.html", n=n)
 
 
 if __name__ == "__main__":
